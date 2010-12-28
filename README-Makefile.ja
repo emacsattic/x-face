@@ -1,0 +1,83 @@
+x-face.el v1.3 Makefile 取扱い説明書
+                                            山岡克美 <yamaoka@jpl.org>
+
+  運が良ければ (つまりあなたの環境が作者のと似ていれば) 添付した
+  Makefile を使ってコンパイルとインストールを行なうことができます。
+  うまくいかない場合は諦めて README.ja に書かれている方法を使うか、
+  または Makefile をご自分で改良して下さい。
+  (そして送っていただけると嬉しいな、と。:-)
+
+
+XEmacs
+======
+
+	% make xinstall
+
+  XEmacs の実行ファイル名がデフォルトの xemacs ではない場合は、
+
+	% make xinstall XEMACS=xemacs-21.2
+
+  のように指定することができます。
+  インストール先のディレクトリを指定するときは
+
+	% make xinstall XLISPDIR=/usr/local/lib/xemacs/site-lisp
+
+  などと指定して下さい。ここに書かれているのがデフォルト値です。
+
+
+Emacs 20.x
+==========
+
+  BITMAP-MULE, VM または Mew をお使いの場合には、まず
+
+	% make lpath
+
+  で、BITMAP-MULE, VM または Mew がインストールされているディレクトリ
+  が load-path に含まれているかどうかを確認して下さい。含まれていたら
+
+	% make install
+
+  で OK です。
+  Emacs の実行ファイル名にデフォルトの emacs 以外のものを使うには
+
+	% make install EMACS=emacs-20.4
+
+  のように指定して下さい。
+  インストール先のディレクトリを指定するときは
+
+	% make install LISPDIR=/usr/local/share/emacs/site-lisp
+
+  などと指定して下さい。ここに書かれているのがデフォルト値です。
+
+  もし BITMAP-MULE, VM または Mew がインストールされているディレクトリ
+  が load-path に含まれていない場合は
+
+	% make install ADDITIONAL_LOAD_PATH=/usr/local/share/emacs/site-lisp/vm
+
+  などと指定しなければなりません。"," や ":" で区切って複数の path を
+  指定することもできます。
+
+
+Mule 2.3
+========
+
+  基本的なやりかたは Emacs 20.x の場合と同じです。
+  ただし、もし Mule 2.3 based on Emacs 19.34 をお使いで、それに付属し
+  ているものよりも新しい CUSTOM パッケージを併用している場合は、以下の
+  ように CUSTOM がインストールされているディレクトリを指定することをお
+  勧めします。(指定しない場合、M-x customize-variable などができません)
+
+	% make install EMACS=mule LISPDIR=/usr/local/share/mule/site-lisp \
+	  ADDITIONAL_LOAD_PATH=/usr/local/share/mule/site-lisp/custom
+
+  BITMAP-MULE, VM または Mew を使う場合は、次のようにすれば良いでしょう。
+
+	% make install EMACS=mule LISPDIR=/usr/local/share/mule/site-lisp \
+	  ADDITIONAL_LOAD_PATH=/usr/local/share/mule/site-lisp/custom,/usr/local/share/mule/site-lisp/bitmap,/usr/local/share/mule/site-lisp/vm,/usr/local/share/mule/site-lisp/mew
+
+  なお、これと同じことが /usr/local/share/mule/site-lisp/subdirs.el と
+  いうファイルに
+
+  (normal-top-level-add-to-load-path '("custom" "bitmap" "vm" "mew"))
+
+  などと書いておくことによっても実現できます。

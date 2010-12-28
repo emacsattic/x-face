@@ -1,0 +1,1271 @@
+2003-08-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.24 was released.
+	Special thanks to Shun-ichi GOTO and Yuuichi Teranishi!
+
+	* x-face.el (x-face-view-single-ascii): Don't bind inhibit-quit;
+	use `next-command-event' or `read-event' instead of
+	`read-char-exclusive'; use `discard-input'.
+
+
+2003-06-27  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.23 was released.
+
+	* x-face.el (x-face-tmp-directory): Revert.
+	(x-face-tmp-directory-name-format): Rename from
+	`x-face-tmp-file-name-format'.
+	(x-face-view-asynchronous-function-for-OS/2): Remove a
+	subdirectory.
+	(x-face-sentinel-delete-file): Ditto.
+	(x-face-view-asynchronous-function-for-some): Ditto.
+
+2003-06-27  Tatsuya Kinoshita  <tats@vega.ocn.ne.jp>
+
+	* x-face.el (x-face-view-buffer): Make a secure subdirectory.
+
+
+2003-06-25  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.22 was released.
+
+	* x-face.el (x-face-tmp-directory): Make an effort to use a secure
+	directory.
+	(x-face-tmp-file-name-format): Don't include directory.
+	(x-face-make-secure-file): Remove.
+	(x-face-save-buffer-no-conversion): Revert.
+	(x-face-view-buffer): Use `x-face-tmp-directory'.
+
+
+2003-06-24  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.21 was released.
+
+	* x-face.el (x-face-make-secure-file): New macro.
+	(x-face-save-buffer-no-conversion): Use it.
+	(x-face-view-buffer): Don't override existing temp files; set the
+	file mode.
+
+
+2002-03-18  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.20 was released.
+
+2002-03-17  TAKAHASHI Kaoru  <kaoru@kaisei.org>
+
+	* x-face.el (x-face-mew-get-article): `mew-cache-hit' が
+	macro の場合 (Mew 1.94.2 以前) に compile が失敗するのを修正。
+
+
+2002-02-25  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.19 was released.
+
+	* x-face.el (x-face-tmp-directory): 関数 `temp-directory' が存在し
+	ていたら (XEmacs 21.0 以上) 使うようにした。From 塚本さん。
+
+
+2002-02-25  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.18 was released.
+
+	* x-face.el (x-face-tmp-directory): FSF Emacs の startup.el に倣っ
+	て、`x-face-tmp-directory' や複数の環境変数を参照するようにした。
+	(x-face-tmp-file-name-format): 値の生成に `expand-file-name' を使
+	うようにした。
+
+
+2002-02-22  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.17 was released.
+
+2002-02-22  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* x-face.el (x-face-wl-get-article): 最初に関数
+	`wl-summary-set-message-buffer-or-redisplay' を呼んで、message バッ
+	ファに移動するようにした。
+
+
+2002-02-20  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.16 was released.
+
+	* x-face.el (x-face-mirror-table-8bit-binary): 新しい定数。
+	(x-face-xbm-to-pbm): Netpbm を使わない実装 (効率は悪いかも)。
+	(x-face-gray-faces-to-xpm): 同上。
+	(x-face-extract-x-face-fields-to-pictures): コマンド `x-face-view'
+	で、とりあえず XPM の多階調 X-Face を表示できるようにした。
+
+2002-02-19  Hideyuki SHIRAI  <shirai@meadowy.org>
+
+	* x-face.el (x-face-mew-get-article): 新しい実装。
+
+2002-02-19  Daiki Ueno  <ueno@unixuser.org>
+
+	* x-face.el (x-face-search-field): 正規表現を修正。
+	(x-face-extract-x-face-fields-to-icons): 同上。
+
+
+2002-02-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.15 was released.
+
+	* x-face-xmas.el (x-face-xmas-search-extents): 多階調 X-Face フィー
+	ルドも探すようにした。
+
+
+2002-02-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.14 was released.
+
+	* x-face.el (x-face-xbm-to-pbm): `shell-command-on-region' の代わ
+	りに `call-process-region' を使うようにした (効率は悪いかも)。
+
+2002-02-14  Daiki Ueno  <ueno@unixuser.org>
+
+	* x-face.el (x-face-gray-faces-to-xpm): `shell-command-on-region'
+	の代わりに `call-process-region' を使うようにした。
+
+2002-02-13  Daiki Ueno  <ueno@unixuser.org>
+
+	* x-face.el (x-face-extract-x-face-fields-to-icons): XEmacs で多階
+	調 X-Face に対応した。
+	(x-face-xbm-to-pbm): 新しい関数。
+	(x-face-gray-faces-to-xpm): 同上。
+
+	* x-face-xmas.el (x-face-xmas-extract-x-face-fields-internal): 多
+	階調 X-Face で XPM フォーマットの画像を作るようにした。
+
+
+2001-09-18  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.13 was released.
+
+	* x-face.el (x-face-search-field): X-Face フィールドの第二行目以降
+	にデータがある場合でも検出できるようにした。
+
+
+2001-09-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.12 was released.
+
+	* x-face-xmas.el (x-face-xmas-wl-display-x-face): 引数をすべてオプ
+	ショナルに変更。
+
+
+2001-07-13  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.11 was released.
+
+2001-07-13  Kenichi OKADA  <okada@opaopa.org>
+
+	* x-face-xmas.el (x-face-xmas-xface-p): 定数値の決定に際して、関数
+	`device-type' の戻り値を参照しないようにした。
+	(x-face-xmas-display-x-face): X-Face が表示できるかどうかを、動的
+	に `device-type' の戻りから判断するようにした。
+	* x-face.el (x-face-encode): 同上。
+
+
+2000-02-23  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.10 was released.
+
+	* x-face-xmas.el (x-face-xmas-replace-x-face-function-for-semi-1):
+	変数 `mime-display-header-hook' が存在しなかったらその値を参照しな
+	いようにした。EMIKO 1.13, EMY 1.13, REMI 1.14 に対応。
+
+
+1999-12-27  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.9 was released.
+
+1999-12-17  NAKAJI Hiroyuki  <nakaji@tutrp.tut.ac.jp>
+
+	* Makefile (MKDIR): New variable.
+	(install): Create $(LISPDIR) if it doesn't exist.
+	(xinstall): Same about $(XLISPDIR)
+
+
+1999-12-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.8 was released.
+
+1999-12-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-replace-x-face-function-for-semi):
+	semi-def.el(c) が load される前に実行した場合は、semi-def.el(c) が
+	load された後で実行するように `after-load-alist' を設定した。
+
+
+1999-12-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.7 was released.
+
+1999-12-08  TAKAHASHI Kaoru  <kaoru@kaisei.org>
+
+	* x-face.el (x-face-insert): 対話的に使われた場合だけ「これは
+	Animate か?」を尋ねるようにした。
+
+
+1999-11-27  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.6 was released.
+
+1999-11-26  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* x-face-xmas.el (x-face-xmas-animation-keymap): 新設した。
+	(x-face-xmas-display-x-face): これが作る extent に `keymap'
+	property として `x-face-xmas-animation-keymap' を付加し、Animated
+	X-Face をマウスボタンで一時停止できるようにした。
+	(x-face-animate): 引数を extetn のみとし、必要な情報は extent から
+	得るようにした。
+
+
+1999-11-23  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.5 was released.
+
+1999-11-23  Tetsuya Uemura  <uemura@pp.iij4u.or.jp>
+
+	* x-face.el (x-face-insert): x-face を挿入するときに、RGB かどうか
+	を聞いた後に animate かどうかを聞くようにした。
+
+
+1999-11-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.4 was released.
+
+1999-11-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* README-Anim.ja: 新設した。
+
+	* x-face-xmas.el (x-face-animate-limit-intervals): ユーザオプション
+	を新設した。
+
+1999-11-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-animate):
+	`x-face-xmas-display-x-face-animate' を改名した;
+	アニメ用の複数の glyph を表示用の extent のプロパティとして持つよう
+	にした;
+	extent に独自の id を付け、ヘッダの sort などによって extent の位置
+	や id が変化してしまっても、それを探して表示を継続させるようにした;
+	選択されていないフレームでは表示の変更を行なわないようにした。
+
+1999-11-15  NAKAJI Hiroyuki  <nakaji@tutrp.tut.ac.jp>
+
+	* Makefile: elisp のスクリプトを分離して eval.el.in に移設した。
+
+	* (eval.el.in): 新設して elisp のスクリプトを収めた。
+
+1999-11-12  Ken'ichi OKADA  <okada@opaopa.org>
+
+	* x-face-xmas.el (x-face-xmas-extract-x-face-fields-to-glyphs,
+	x-face-xmas-display-x-face): Animated X-Face のため変更した。
+	(x-face-xmas-extract-x-face-fields-internal,
+	x-face-xmas-pack-icons, x-face-xmas-display-x-face-animate): 新設し
+	た。
+
+	* x-face.el (x-face-extract-x-face-fields-to-icons,
+	x-face-extract-x-face-fields-to-single-icons-buffer,
+	x-face-extract-x-face-fields-to-pictures, x-face-save-files):
+	Animated X-Face のため変更した。
+
+
+1999-11-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.3 was released.
+
+1999-11-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-extract-x-face-fields-to-icons): RGB を宣言して
+	いるにもかかわらず X-Face フィールドの数が正しくない場合の戻り値を、
+	横に並べたマルチ X-Face にした。
+
+1999-11-12  Ken'ichi OKADA  <okada@opaopa.org>
+
+	* x-face.el (x-face-extract-x-face-fields-to-icons): RGB を宣言して
+	いるにもかかわらず X-Face フィールドの数が正しくない場合の戻り値の
+	形式を修正した。
+
+
+1999-11-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.2 was released.
+
+1999-11-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: bitmap-mule を使ってロゴを表示する機能が働かなくなって
+	いたのを修正した。また x-face.elc にセーブするロゴを従来の bitmap
+	chars の代わりにデコードした xbm のデータに変更して Emacs 20.4.91
+	でも動作するようにした。
+
+
+1999-11-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6.1 was released.
+
+1999-11-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* README.ja: XEmacs で gnus を使う場合の設定方法を変更した。
+
+	* x-face-xmas.el (x-face-xmas-replace-gnus-article-display-x-face,
+	x-face-xmas-replace-gnus-article-display-x-face): 廃止した。
+	(x-face-xmas-mime-highlight-headers): 簡略化し、gnus では何もしな
+	いようにした。代わりに `gnus-article-x-face-command' に
+	`x-face-xmas-display-x-face' を設定する必要がある。
+	(x-face-xmas-display-x-face): From フィールドが無い gnus の記事バッ
+	ファでも動作するようにした。
+
+
+1999-09-27  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.6 "Yellow Submarine (remix)" was released.
+
+1999-09-27  TSUMURA Tomoaki  <tsumura@notredame.ac.jp>
+
+	* x-face.el (x-face-expand-file-name): 正規表現に "^" を追加した。
+
+
+1999-09-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.5.5 was released.
+
+1999-09-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: compile 時に gnus-sum を load して、macro
+	`gnus-summary-article-number' の定義を参照するようにした。もし
+	compile 時に gnus-sum の load に失敗した場合は、実働時に同 macro を
+	関数として eval することを試みる (荒技 ^^;;)。
+
+
+1999-09-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.5.4 was released.
+
+1999-09-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* README.ja: Wanderlust の初期設定の例を追加した。
+
+	* x-face-xmas.el (x-face-xmas-wl-display-x-face):
+	`x-face-xmas-mew-display-x-face' から改名し、
+	`wl-highlight-x-face-func' の値にセットした。
+	x-face-xmas-mew-display-x-face は alias として存続。
+
+
+1999-06-24  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.5.3 was released.
+
+1999-06-24  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-display-x-face): gnus の article バッ
+	ファで使う場合は、元の X-Face フィールドを隠さないようにした。これ
+	は gnus が行なうべき仕事で、しかもフィールドの最後の改行までも含む
+	text property を付加してしまうと、gnus がヘッダを sort するときに改
+	行文字だけが sort の対象にならないので、おかしな表示が行なわれる場
+	合がある。
+
+	* README.ja: 6. XEmacs. の項に T-gnus で使う場合の設定例を追加した。
+	(FSF Emacsen では x-face-mule で表示しましょう。:-)
+
+
+1999-06-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.5.2 was released.
+
+1999-06-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-display-x-face): extent property に
+	duplicable = t を追加した。
+
+
+1999-06-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.5.1 was released.
+
+1999-06-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-display-x-face):
+	`gnus-article-x-face-command' に設定して使う場合に、同じ記事に対し
+	て複数回呼ばれないように対策した。
+
+
+1999-03-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.5 "I Me Mine" was released.
+
+1999-03-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* Makefile: 新設した。
+	* README-Makefile.ja: 新設した。
+
+	* x-face.el: VM や Mew の macro を、コンパイル時に load するように
+	した。
+
+	* x-face-xmas.el (x-face-xmas-mime-highlight-headers): Single part
+	で image だけを含むメッセージを XEmacs の gnus で inline 表示すると
+	きに、image が header の下に表示されるように修正した。その他に、変
+	数を custom で変更する場合のための selection の追加など。
+
+
+1998-10-21  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.4 "Hello Goodbye" was released.
+
+1998-10-21  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-mime-highlight-headers): において、
+	gnus で記事を読むときの Date の表示を local に強制することをやめた。
+	従来のやり方では新しい FLIM や SEMI を使う場合に
+	`mime-message-structure' を破壊してしまうため。そういうことは
+	`gnus-article-display-hook' に `gnus-article-date-local' をユーザが
+	`add-hook' して行なうべき。
+
+
+1998-10-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.3 "Good Night" was released.
+
+1998-10-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-replace-x-face-function-for-semi):
+	SEMI, WEMI 1.9 にも対応させた。
+
+	* x-face.el: `require' に失敗したときのエラーシグナルは`file-error'
+	ではないことに気付き、`condition-case' の受けを `error' に修正した;
+	splash 画面表示のために `eval-and-compile' で `bitmap' を呼ぶよう
+	にした。
+
+
+1998-07-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.2 "The Fool On The Hill" was released.
+
+1998-07-15 OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+	* x-face.el (x-face-wl-get-article): `wl-summary-redisplay' を
+	`wl-summary-set-message-buffer-or-redisplay' に変更した。
+
+1998-07-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el: batch mode の XEmacs でコンパイルする場合を考慮し
+	て、`device-type' の戻り値が `stream' だったら `x-face-xmas-splash'
+	を eval しないようにした。北目さん <kitame@northeye.org> のご指摘に
+	よる。
+
+
+1998-07-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.1 "Every Little Thing" was released.
+
+1998-07-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-insert): `mew-draft-mode' のバッファで実行する
+	ときに、Mime-Version: フィールドがあったらその上に insert するよう
+	にした; `mew-marker-header-end' が存在したら insert 後に正しい値に
+	修正するようにした。
+
+
+1998-07-06  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3.0 "Day Tripper" was released.
+
+1998-07-06  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-force-display-x-face): 新設した。内容
+	は (x-face-xmas-display-x-face 1)。
+
+	* x-face.el (x-face-save-or-view-method-alist,
+	x-face-wl-get-article): Wanderlust 用の save, view method を追加し
+	た。
+	(x-face-define-menu): menu bar を表示するかどうかはユーザの意志を
+	尊重し、表示しない場合は menu を作るだけの動作にした。
+	(x-face-define-menu): 同上。
+
+
+1998-06-18  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b10 "Can't Buy Me Love" was released.
+
+1998-06-18  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-replace-x-face-function-for-semi):
+	SEMI の version 判定を従来の `mime-module-version' より優先して
+	`mime-user-interface-version' を参照するようにした。
+
+	* x-face.el (x-face-snatch-x-face-mule-original-x-face-fields):
+	`x-face-mule-original-x-face-fields' に加えて、x-face-mule の資源で
+	ある `x-face-mule-original-from-field' が存在する場合には利用するよ
+	うにした。旧 x-face-mule の x-face-mule: という prefix にも対応して
+	いる。
+
+
+1998-06-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b9 "Baby's In Back" was released.
+
+1998-06-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-mime-highlight-headers): SEMI 1.7 対
+	応のため original major-mode を `mime-raw-buffer' から得るようにし
+	た。
+	(x-face-xmas-replace-x-face-function-for-semi): SEMI 1.7 未満と 1.7
+	以上で使う関数を別々に作成した。1.7 以上の場合は
+	`mime-display-header-hook' の内容の置き換えを行なう。
+
+
+1998-05-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b8 "And Your Bird Can Sing" was released.
+
+1998-05-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: `x-face-mule:original-x-face-fields' を参照して
+	`x-face-save' を行なうとファイル名が nobody になってしまうバグを修
+	正した。
+
+
+1998-04-20  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b7 "Zexy Sedie" was released.
+
+1998-04-20  OKUNISHI Fujikazu  <fuji0924@mbox.kyoto-inet.or.jp>
+
+	* x-face.el: `gnus-show-all-headers' と `gnus-show-mime' を不用意に
+	参照している部分を修正した。
+
+
+1998-04-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b6 "Yellow Submarine" was released.
+
+1998-04-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (x-face-xmas-splash):
+	`x-face-inhibit-loadup-splash' を non-nil にすることによって、
+	x-face-xmas.elc が load されるときの splash 画面の表示を抑制できる
+	ようにした。
+
+	* x-face.el: `bitmap' が使える場合は Emacs 20.2 と Mule 2.3 でも
+	x-face.elc が load されるときに splash 画面を表示するようにした。変
+	数 `x-face-inhibit-loadup-splash' を non-nil にすることによって表示
+	の抑制が可能;
+	郡山さんのご指摘により custom を `eval-and-compile' で呼ぶようにし
+	た;
+	不要なので `mew-field-visible' などの操作をやめた;
+	`gnus-original-article-buffer' がある Gnus では、save または view
+	のとき `gnus-show-all-headers' と `gnus-show-mime' の値を操作しな
+	いようにした。
+
+
+1998-04-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b5 "TaXman" was released.
+
+1998-04-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: 郡山さん <kory@ba2.so-net.ne.jp> 作による x-face-mule
+	v0.14 で新設された変数 `x-face-mule:original-x-face-fields' (バッファ
+	ローカル変数で、抽出した X-Face: フィールドが含まれる) が存在する場
+	合は積極的に利用して、ビットマップイメージに変換されてしまった後で
+	も save または view ができるようにした。速度の向上も期待できる。
+	Gnus, MH-E, Mew, RMAIL, VM, cmail の各 MUA で対応;
+	従来 Gnus では save または view の前後で必ず
+	`gnus-summary-show-article' を実行していたが、必要無いときには行な
+	わないようにした。
+
+	* x-face.el: Space で始まるバッファに対して `buffer-disable-undo'
+	するのを止めた。(必要無いことが今ごろわかった ^^;;)
+	* x-face-xmas.el: 同上。
+
+
+1998-03-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b4 "We Can Work It Out" was released.
+
+1998-03-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-read-file-name): 奥西さん
+	<fuji0924@mbox.kyoto-inet.or.jp> のご指摘によって Mule 2.3@19.28 の
+	`read-file-name' が buggy であることがわかったので、このマクロで独
+	自に定義するようにした。
+
+
+1998-03-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b3 "She's LeaVing Home" was released.
+
+1998-03-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (put-alist): 無い場合の定義を追加した;
+	(eval-and-compile, eval-when-compile): Nemacs 用にマクロ定義を追加
+	した。
+
+	* x-face.el: ディレクトリ区切り文字を "/" に統一。(1.3b1 以前に戻し
+	た。)
+	* x-face-xmas.el: 同上。
+
+1998-03-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: 古い custom のための `defgroup' と `defcustom' のマク
+	ロ定義を `eval-when-compile' で囲んだ。
+
+1998-03-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el (mime-preview-original-major-mode): SEMI 1.1.0 に
+	対応して `mime-view-original-major-mode' の代わりに参照するようにし
+	た。
+	(mime-preview-x-face-function-use-highlight-headers): SEMI 1.1.0 に
+	対応して `mime-preview/x-face-function-use-highlight-headers' の代
+	わりに参照するようにした。
+
+
+1998-03-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b2 "Back In The U.S.S.R" was released.
+
+1998-03-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: XEmacs 用の変数を値 nil で定義した。
+	(x-face-tmp-file-name-format): 津邑さん
+	<tsumura@kuis.kyoto-u.ac.jp> のご指摘により、Win-NT の場合に生成す
+	るファイル名のディレクトリ区切り文字に "/" ではなくて "\" を使うよ
+	うにした。Emacsen が直接操作するファイルの名前では、従来通り "/"
+	を使う。
+
+
+1998-03-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.3-b1 "Ticket To Ride" was released.
+
+1998-03-09  KOSEKI Yoshinori  <kose@yk.netlaputa.or.jp>
+
+	* x-face.el (x-face-view-asynchronous-function-for-win95): 従来は表
+	示開始してから変数 `x-face-viewer-startup-time' で設定された秒数だ
+	け待ってイメージファイル消去していたが、sentinel を立てて表示プロセ
+	スがイメージファイルを読んだことを検出して消去するようにした。この
+	結果 Win では `x-face-viewer-startup-time' で待ち時間の調整をする必
+	要が無くなった。
+
+1997-12-02  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-logo.xpm: 作り直した。
+	* x-face-beta-logo.xpm: 同上。
+
+1997-11-21  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el: XEmacs の送信バッファで表示するモノクロイメージの
+	色が、dialog box 用の face と同じになってしまうバグを修正した;
+	XEmacs の dialog box に [Ok] [Cancel] ボタンが付かないバグを修正し
+	た。
+
+1997-11-18  OKUNISHI Fujikazu  <fuji0924@mbox.kyoto-inet.or.jp>
+
+	* x-face.el (x-face-mew-get-article): Message/Rfc822 なパートにも対
+	応させた。(tm/SEMI-MUA でもできるようになるといいな > 組長:-)
+
+1997-11-18  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-xmas.el: 新設し、XEmacs 専用のプログラムなどを収めるように
+	した。
+
+	* x-face.el: XEmacs のメニューバー出現位置を変更した。
+
+
+1997-10-25  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.9 "Strawberry Fields Forever" was released.
+
+1997-10-25  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: X-Face フィールドの末尾に text-property として icon の
+	データを付加するのをやめ、代わりに X-Face-Type フィールドの末尾にファ
+	イル名を text-property として付加するようにした。
+	`x-face-xmas-display-x-face' の実行時に、このデータと X-Face フィー
+	ルドの文字列の両方を元に二つのキャッシュを参照する。
+	(x-face-encode): この関数でもファイルキャッシュを参照/登録するよう
+	にした;
+	寺西さんの原案により、ヘッダフィールドとイメージの組みでもキャッシュ
+	するようにした。とりあえず従来のものをファイルキャッシュ、今回新設
+	したものをフィールドキャッシュと呼ぶことにする。XEmacs は単一の
+	X-Face フィールドをイメージとして表示するのは速いので、フィールド
+	キャッシュはカラー/マルチ X-Face に限って使用する;
+	イメージのキャッシュをプリチャージする関数を作った;
+	XEmacs の dialog box で使えないファイルをマウスで選択できないよう
+	にした。
+
+
+1997-10-23  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.9-b3 "Rocky Raccoon" was released.
+
+1997-10-23  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: XEmacs でメニューから Encode または Insert を実行した
+	場合に、dialog box を自動スクロールさせて待時間のイライラを少し解消
+	した。:-)  また２回目以降の dialog box の表示を速めた;
+	XEmacs で使う Mew 1.92b7 のために X-Face を表示するための関数を作っ
+	た。
+
+
+1997-10-21  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.9-b2 "Penny Lane" was released.
+
+1997-10-21  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: XEmacs で使う Mew 1.92b5 に対応するため、関数群を整理
+	した。
+	(x-face-compressor, x-face-compressor-program-list): ファイルの圧
+	縮伸長に bzip2 を使えるようにした。四つのユーザ変数 `x-face-gzip-*'
+	を廃止し、代わりにこれらの変数を新設したが、しばらくの間は旧設定も
+	有効にする。
+	(x-face-call-process-is-evil): 削除した。
+	(x-face-define-menu): 無条件にメニューバーを生かすようにした。
+
+
+1997-10-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.9-b1 "Ob-la-di,Ob-la-da" was released.
+
+1997-10-16  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: メニューから Encode または Insert を実行した場合に、
+	XEmacs では dialog box にイメージを表示するようにした。初めて実行す
+	るときにイメージデータをキャッシュするので２回目以降は速い。イメー
+	ジファイルの変更時刻かサイズが変わった場合は、そのファイルについて
+	だけイメージデータを作り直す。また、XEmacs 以外の Emacsen ではファ
+	イルの候補一覧を表示するようにした;
+	19.28 以下の Emacsen に存在しない関数の定義に `defmacro' を使うの
+	をやめた。
+	(x-face-xmas-display-x-face): インタラクティブに使う場合に、あらか
+	じめ設定した region をイメージの表示/非表示の対象にするのは
+	`zmacs-regions' の値が non-nil の場合だけに限定した。
+
+
+1997-10-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.8 "Norwegian Wood" was released.
+
+1997-10-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: byte-comp 時に warning を静かにする方法を変更;
+	`defcustom' の :type を設定。
+
+
+1997-10-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.8-b5 "Norwegian Wood" was released.
+
+1997-10-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-define-menu): メニューが使えるようにした。適切
+	な HOOK に add-hook して使う。
+	(x-face-image-file-directory-for-save): イメージファイルをセーブす
+	るためのディレクトリ名を指定するための変数として新設した。デフォル
+	ト値は従来の `x-face-image-file-directory' と同じ。
+	(x-face-insert): `x-face-add-x-face-version-header' が non-nil で
+	かつ `select-xface-version' が存在したら、X-Face-Version フィール
+	ドに `select-xface-version' の文字列も挿入するようにした。
+	(x-face-xmas-highlight-headers): highlight-headers を置き換える際
+	に `x-face-xmas-like-highlight-headers' を t に拘束するのをやめた。
+	(x-face-find-file-no-conversion): gzip されたファイルかどうかを
+	magic で判断するようにした。
+	`defcustom' を採用。使えない Emacsen では `defvar' で置き換え。
+
+
+1997-10-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.8-b4 "Martha My Dear" was released.
+
+1997-10-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* METHOD.ja: カラー/マルチ X-Face の規格書ふう読み物として添付した。
+
+	* x-face.el (x-face-xmas-mime-highlight-headers): マルチパートでフォ
+	ワードされたメッセージの Date: が正しく表示されるようにした;
+	アーティクルから From フィールドを抽出するときのバグを修正。
+
+
+1997-09-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.8-b3 "Lovely Rita" was released.
+
+1997-09-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-insert): 実行後に Mew の変数
+	`mew-draft-buffer-header' をすべての Emacsen で正しいポジションの値
+	に修正するようにした;
+	XEmacs で Mew を使う場合に、`mew-draft-mode-hook' に
+	(x-face-xmas-display-x-face 1) を追加する必要が無くなった。イメー
+	ジの表示は置き換えた関数 `highlight-headers' で行なう。
+	(x-face-xmas-highlight-headers): `highlight-headers' を置き換える
+	際に、オリジナルの `highlight-headers' が付けた invisible な
+	extent を削除するようにした。
+	(x-face-xmas-highlight-headers): XEmacs の `mew-draft-mode' では
+	`highlight-headers' を実行するときに
+	`highlight-headers-hack-x-face-p' を nil に拘束してしまうのでイメー
+	ジの表示ができない。そこで `highlight-headers' を置き換える直前に
+	`x-face-insert' を実行したときの `highlight-headers-hack-x-face-p'
+	の値を参照するようにした。
+	(x-face-xmas-cmail-display-x-face): XEmacs の cmail でメールを読む
+	ときに X-Face を表示するための関数として作成した。
+	`cmail-show-contents-after-hook' に `add-hook' して使う。
+	cmail でメッセージヘッダを取得する方法を変更した。
+
+
+1997-09-20  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.8-b2 "Kansas City" was released.
+
+1997-09-20  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-encode): encoded string のリストを返すようにし
+	た。
+	(x-face-encode, x-face-insert): インタラクティブに呼ばれたときに、
+	RGB かどうかわからなかったら尋ねるようにした。
+	変数 `highlight-headers-hack-x-face-p' が存在して値が nil だったら、
+	場合によらずインライン表示しないようにした。
+	(x-face-default-encoded-string,
+	x-face-empty-x-face-encoded-string): 不要になったのでを削除した。
+	(x-face-xbm-to-x-faces): 使われなくなっていたので削除した。
+	(x-face-xmas-replace-x-face-function-for-tm): 長谷部さん
+	<hasebe@mtgcb.telcom.oki.co.jp> のご指摘により、`require' していた
+	`mime-image' を `tm-image' に直した。
+
+
+1997-09-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.8-b1 "Julia" was released.
+
+1997-09-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-xmas-like-highlight-headers): 寺西さん
+	<teranisi@isl.ntt.co.jp> のご指摘を受け、X-Face の表示方法を
+	highlight-headers ふうにするためのフラグとして新設した。t で有効。
+	デフォルトは nil で Gnus ふうの表示になる。
+	`x-face-xmas-replace-highlight-headers' で置き換えられた関数
+	`highlight-headers' は無条件でオリジナルと同じ仕様になる。
+	(x-face-xmas-replace-highlight-headers): 寺西さんのご指摘により
+	`highlight-headers-hack-x-face-p' が nil のときは置き換えられた関
+	数 `highlight-headers' でもインライン表示しないようにした。
+	XEmacs でインライン表示するときに invisible にする X-Face フィール
+	ドの領域を修正。
+
+
+1997-09-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7 "I Feel Fine" was released.
+
+
+1997-09-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b11 "Honey Pie" was released.
+
+1997-09-10  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: Nemacs のために `get-buffer-window' の第二引数を使わな
+	いようにした;
+	Nemacs の cl.el で定義されている関数 `mod' の仕様が他の	Emacsen と
+	異なるため、代わりに `%' を使うようにした;
+	`gnus-article-display-x-face' を置き換えるための関数を作成した。
+	(x-face-view, x-face-save): 動作確認のために、引数付きで使うとカラー
+	イメージのフォーマットを選択できるようにした。
+	tm/SEMI の `mime-preview/x-face-function-use-highlight-headers' を
+	XEmacs 用に置き換えるための関数を作成した。
+	(x-face-xmas-display-x-face): 全面的に書き換えた。
+	XEmacs 用に `highlight-headers' を置き換えるための関数を作成した。
+	(x-face-encode, x-face-insert): 全面的に書き換えた。
+	X-Face フィールドを uncompface したとき、フィールドの最後に icon
+	のデータを text-property として残しておくようにした。２回目以降の
+	x-face-{save,view} では umcompface を呼ばないので少し速くなる。た
+	だし Nemacs では効果無し。
+	(x-face-view-asynchronous): 値が nil のとき、viewer に無変換でイメー
+	ジデータを渡すようにした。
+
+
+1997-09-04  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b10 "Good Day Sunshine" was released.
+
+1997-09-04  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: 48x48 より大きなカラー X-Face を正しく作れるようにした。
+	現状では大きなカラー X-Face は、RGB に分解したイメージデータを縦方
+	向に連結した xbm ファイルにしなければならないが、将来は xpm や bmp
+	から直接 X-Face を作るようにしたい;
+	Netscape で表示できないため、xbm を作るとき
+	"/* X-Face-Type: MONO */" というコメントを付けるのをやめた;
+	一時的に作るイメージファイルの名前にも拡張子 -- .xbm .xpm .bmp --
+	を付けるようにした;
+	XEmacs 固有の関数 `int-to-char' を使わないようにした。
+
+
+1997-09-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b9 "Fixing A Hole" was released.
+
+1997-09-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-save): この関数を復活。従来は既存のファイルに上
+	書きするかどうかを尋ねていたが、今回からユニークな名前ですべてセー
+	ブしてしまうようにした。
+	(x-face-image-file-directory): ファイルをセーブするディレクトリを指
+	定する変数として従来使っていた変数 `x-face-xbm-file-directory' を改
+	名した。
+
+1997-09-03  KOSEKI Yoshinori  <kose@yk.netlaputa.or.jp>
+	Katsumi Yamaoka <yamaoka@jpl.org>
+
+	* x-face.el: カラー X-Face を BMP フォーマットにエンコードする関数
+	を新設。
+
+1997-09-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: カラー X-Face を XPM フォーマットにエンコードする関数
+	を新設。
+	(x-face-view): 4倍寸表示機能を削除。
+	(x-face-ascii-view): 復活。すべて 48x48 サイズで表示する。
+
+
+1997-08-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b8 "Eleanor Rigby" was released.
+
+1997-08-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: カラー/マルチ X-Face 対応のための基本的な関数群を整備
+	する大規模な変更を行なった。`x-face-save' と `x-face-ascii-view'
+	は未対応。バグもたくさんあるはずで、とても人前に出せない。(^^;;)
+
+1997-08-30  Tatsuya Ichikawa  <t-ichi@po.shiojiri.ne.jp>
+	Katsumi Yamaoka <yamaoka@jpl.org>
+
+	* x-face.el (x-face-call-process-is-evil): 変数を新設 (デフォルト
+	は nil)。Non-nil にすると、compface コマンドを `call-process' の代
+	わりに `start-process' で呼ぶように変更した。この場合
+	`x-face-temp-file' で設定される名前のファイルを一時的に作成する。
+	Meadow(alpha2.00) の `call-process' が満足に動作しない問題の暫定対
+	策で、将来は削除する予定。
+
+1997-08-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-Y-or-n-p): 手直し。
+
+
+1997-08-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b7 "Dr. Robert" was released.
+
+1997-08-15  KOSEKI Yoshinori  <kose@yk.netlaputa.or.jp>
+
+	* x-face.el: cmail (2.59.11) に対応した; 送信するメッセージに
+	X-Face フィールドを自動付加するための hook として、Gnus (v5.1 以下)
+	と GNUS の場合は `news-setup-hook' を推奨。(5. Customize の項)
+
+
+1997-08-13  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b6 "Carry That Weight" was released.
+
+1997-08-13  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: xbm ファイルのコメント行を評価する方法を変更。RGB か
+	MONO が明示されていない場合は Unknown として扱う。
+
+
+1997-08-12  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b5 "Blackbird" was released.
+
+1997-08-12  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-xmas-remove-x-face-glyph): 長谷部さん
+	<hasebe@mtgcb.telcom.oki.co.jp> のご指摘により、XEmacs で tm の
+	`mime-editor/preview-message' や SEMI の
+	`mime-edit-preview-message' コマンドを実行したときに、read-only な
+	領域の隣りにフィールドを挿入する際に起こるエラーを回避するための関
+	数として新設。tm では `mime-editor/translate-hook'、SEMI では
+	`mime-edit-translate-hook' に add-hook して使う。このエラーはなぜ
+	か XEmacs 20.2 だけで起こる。
+	奥西さんの命名により X-Face-Type フィールドを新設した。
+	`x-face-insert' で挿入した X-Face が複数に分割された場合に自動挿入
+	して、イメージを復元する方法を指定する。(強制ではない。)
+
+
+1997-08-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b4 "Across The Universe" was released.
+
+1997-08-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: 縦48×横48 以外の xbm ファイルを読めるようにした。縦
+	横がそれぞれ 48 の自然数倍でない場合は右と下に余白を追加してから分
+	割し、マルチ X-Face を作る;
+	変数 `x-face-default-encoded-string' の値とプログラム内部で扱う
+	encoded string に、先頭の空白と最後の改行を含めるようにした。旧仕
+	様の `x-face-default-encoded-string' にはプログラムで対応。
+	(x-face-encode): 仕様を変更し、戻り値を encoded string のリストに
+	した。また interactive で使った場合、通常は X-Face フィールド文字
+	列を表示し、arg 付きで使った場合は elisp 式を表示するようにした。
+	xbm を x-face に変換する途中で icon フォーマットに変換する処理を少
+	し高速にした。
+	(x-face-codename): 文字定数として新設した。
+
+
+1997-08-06  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b3 was released.
+
+1997-08-06  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: 関数の小分け、macro 化、等々...。
+	(x-face-viewer-startup-time): 外部 viewer の起動待ち時間を設定する
+	ためのユーザ変数として新設。
+	外部 viewer のデフォルト設定を追加。(OS/2→pmview, EMX)
+
+
+1997-08-04  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b2 was released.
+
+1997-08-04  KOSEKI Yoshinori  <kose@yk.netlaputa.or.jp>
+
+	* x-face.el: Mule for Win32 用の viewer 関数を追加した。DOS 窓から
+	start foo.xbm で (default のアプリケーションは Web ブラウザ) 表示
+	できる事を利用しています。Mule から呼び出した	Web ブラウザを終了
+	しないと Mule が終了できないという事はありますが、それはしょうがな
+	いのでしょう;
+	小関さん <kose@yk.netlaputa.or.jp> に開発に参加して頂き、Mule for
+	Win32 対応機能を追加した。
+
+
+1997-07-25  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.7-b1 was released.
+
+1997-07-25  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: Multi-X-Face に対応。arg 付きで `x-face-insert' を行
+	なうことにより、すでに存在する X-Face フィールドを消さずに挿入でき
+	る。XEmacs --with-xface では、送信メッセージのバッファで複数のイメー
+	ジを表示。
+
+
+1997-07-22  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.6 was released.
+
+1997-07-22  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: Emacs 20.0.91, MULE 3.0 に対応。
+
+
+1997-07-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.6-b3 was released.
+
+1997-07-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-debug): 変数を新設。Non-nil にしておくと、エラー
+	が起きたときにその原因になったバッファの内容を表示する。
+	DOS 系などの OS で使う場合を考慮し、行末コードが CRLF だったら前もっ
+	て CR を削除するようにした。
+
+
+1997-07-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.6-b2 was released.
+
+1997-07-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: XEmacs --with-xface では、送信メッセージのバッファで
+	encoded string を隠して直接イメージを表示できるようにした;
+	re-search で使う正規表現を簡略化して、Mule-2.3@19.28 でも遅くなら
+	ないようにした。
+
+
+1997-06-06  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.6-b1 was released.
+
+1997-06-06  OKUNISHI Fujikazu  <fuji0924@mbox.kyoto-inet.or.jp>
+
+	* x-face.el: Mew 1.77 以上にも対応した;
+	MIME 解析が有効になってる時にカーソルがヘッダ部分にない場合を考慮
+	した。決して message/rfc822 なパートにあるヘッダにあるフィールドが
+	取れるわけではないことに注意。(^_^;
+
+
+1997-04-21  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.5 was released.
+
+1997-04-21  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: XEmacs-20.x 用に `insert-file-contents',
+	`write-region', `call-process-region' で拘束する coding-system を
+	見直した。
+
+
+1997-04-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.4 was released.
+
+1996-04-15  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: `x-face-tmp-directory' (通常は "/tmp" か環境変数 TMP
+	と同じ) の下にテンポラリファイルを作って消し忘れていたのを修正した。
+	`x-face-view-asynchronous' の値を non-nil にしていた方は確認して下
+	さい (^^;;)。
+
+
+1997-04-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.3 was released.
+
+1997-04-07  OKUNISHI Fujikazu  <fuji0924@mbox.kyoto-inet.or.jp>
+
+	* x-face.el: Mew でも X-Face フィールドの取得にメッセージバッファ
+	ではなくオリジナルのファイルを使うようにした。これは Mew が二つの
+	バッファを持っていないためで、この変更により `mew-bitmap-mule' を
+	使ってインライン表示している場合にも正しくデコードできるようになっ
+	た。また Summary モードだけでなく Virtual モードにも配慮した。
+	`x-face-save-or-view-method-alist' のデフォルト設定値が変わってい
+	ることにご注意;
+	Known Bug: マルチパートなメールで MIME analysis が t の場合、ボディ
+	のパートにカーソルがある場合を考慮していない。:-p
+
+1997-04-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: 奥西さん <fuji0924@mbox.kyoto-inet.or.jp> に開発に参
+	加して頂き、OS/2 対応機能を追加した。
+	(x-face-view-asynchronous-function): 変数を追加し、X-Face を非同期
+	プロセスで表示するときの外部コマンドを自由に設定できるようにした。
+	デフォルトでは OS/2 と一般的な UN|X に対応。
+
+
+1997-03-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.2 was released.
+
+1997-03-17  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: XEmacs 20.1b7 からの coding-system の扱いの変更に対応
+	した。
+
+
+1997-03-??  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2.1 was released.
+
+1997-03-??  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: いつ何をやったか不明。(^^;;)
+
+
+1997-03-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.2 was released.
+
+1997-03-03  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: XEmacs 20.x に対応した;
+	`insert-file-contents', `write-region', `call-process-region' で拘
+	束する coding-system を見直した。
+
+
+1996-11-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.1 was released.
+
+1996-11-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el (x-face-encode): Command 名を `x-face-generate-x-face'
+	から変更した。`x-face-generate-x-face' は alias で存続。
+	C-g などで中断したときの後始末を完全にした。
+	(x-face-save-or-view-method-alist): mh-e で article を直接ファイル
+	から読むようにした結果、デフォルト設定値が変わった。
+	なぜか山岡の環境では希にエンコードに失敗することがあるので、7回ま
+	でリトライを行なうようにした (1回では足りなかった ;_;)。それでもダ
+	メだったら空の face を付加。
+
+1996-11-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: hook をいくつか作った。
+
+
+1996-10-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face: Version 1.0 was released.
+
+1996-10-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face.el: それまでの x-face-utils.el から改名した。
+
+
+1996-10-04  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face-utils: Version 0.6 was released.
+
+1996-10-04  Katsumi Yamaoka  <yamaoka@jpl.org>
+	Tatsuya Ichikawa <t-ichi@po.shiojiri.ne.jp>
+
+	* x-face-utils.el: RMAIL と VM に対応した (つもり)。
+
+
+1996-10-01  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face-utils: Version 0.5 was released.
+
+1996-10-01  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-utils.el (x-face-mail-fetch-field): bug を修正した。
+
+
+1996-09-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face-utils: Version 0.4 was released.
+
+1996-09-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-utils.el: 48桁×24行の ascii picture による表示機能を追加
+	し、キャラクタ端末でも X-Face を見ることができるようにした。
+	(x-face-ls-program): 変数を廃止した。
+
+
+1996-09-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face-utils: Version 0.3 was released.
+
+1996-09-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-utils.el (x-face-view): 4倍寸表示を可能にした。
+	coding-system の拘束を綿密に行なった。(Mule)
+	中治さん <nakaji@zeisei.dpri.kyoto-u.ac.jp> のリクエストに応えて
+	Mew の設定を追加した。
+	すべての GNUS と Gnus に対応した(つもり)。
+	(x-face-mh-show-original): 関数を廃止した。
+
+
+1996-09-24  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face-utils: Version 0.2 was released.
+
+1996-09-24  Tatsuya Ichikawa  <t-ichi@po.shiojiri.ne.jp>
+
+	* x-face-utils.el (x-face-insert): 毎回ファイルを選ぶことができる
+	ようにした;
+	市川さんの X-Face の絵が毎回変わるので:-p、セーブするときにユニー
+	クなファイル名を自動生成するようにした。
+
+1996-09-24  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* x-face-utils.el: gzip で圧縮された xbm ファイルに対応した。
+
+
+1996-09-19  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* X-Face-utils: Version 0.1 was released.
+

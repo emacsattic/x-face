@@ -1,0 +1,7 @@
+やりたいこととやるべきこととやめたいこととやめるべきこと
+
+x-face.el の XEmacs 専用部分の x-face-xmas.el への移籍を進めること!!
+x-face-save をモノクロでも xbm 以外のフォーマットでできるようにすること!!
+x-face-insert を xbm 以外のフォーマットでもできるようにすること!!
+xbm ファイルにコメントを書くのをやめること!!
+x-face-encode と x-face-insert の共通部分の整理 (まあいいか ^^)

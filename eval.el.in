@@ -1,0 +1,15 @@
+;;; -*- Emacs-Lisp -*-
+(let ((arg "@ADDITIONAL_LOAD_PATH@")
+      path paths)
+  (while (string-match "[\t ,:]+" arg)
+    (setq path (substring arg 0 (match-beginning 0))
+	  arg (substring arg (match-end 0)))
+    (or (zerop (length path))
+	(setq paths (nconc paths (list (file-name-as-directory
+					(expand-file-name path)))))))
+  (if paths
+      (progn
+	(princ (concat "\nAdditional load-path:\n "
+		       (mapconcat (function identity) paths "\n ")
+		       "\n"))
+	(setq load-path (nconc paths load-path)))))

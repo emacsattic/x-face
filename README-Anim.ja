@@ -1,0 +1,59 @@
+v1.3.6.4 から XEmacs で animated X-Face を表示する機能を盛り込みました。
+岡田健一さんの原案を山岡が少し変えたものです。
+
+
+
+X-Face の表示に `x-face-xmas-display-x-face' を使う必要があるので、主
+に `highlight-headers' を使ってヘッダの修飾を行なう場合は .emacs に
+
+(require 'x-face)
+(x-face-xmas-replace-highlight-headers)
+
+これらの記述を行なって下さい。
+例えば VM や SEMI の `mime-edit-preview-message' が該当し、Wanderlust
+や gnus は一般には対象外です。
+
+
+
+イメージの切り替え周期の上下限を、`x-face-animate-limit-intervals' と
+いうユーザオプションで設定することができます。
+
+
+
+Animated X-Face の表示中に
+
+Args out of range: 負数
+
+というエラーが出て止まってしまう場合がありますが、これが気になる場合は
+.emacs に次のようなものを書き入れて下さい。
+
+(defadvice itimer-time-difference (after return-positive-value-anyway
+					 activate)
+  "Protect against the negative number."
+  (if (< ad-return-value 0)
+      (setq ad-return-value 0.001)))
+
+
+
+以下は animated X-Face のサンプルです。これをヘッダに挿入したメールを
+ご自分宛てに送信して、動作を確認してみて下さい。
+
+X-Face-Type: animate=0.5; geometry=1x1
+X-Face: yVVeijh0Lo*@-f58mO)3}ppOa;W_mq^hbj7|y<Cz)Hw_iz62OkR\}=vl2J153BY]g"xj50/
+ JD`embwY?XB;FUI))/lq2T|@u#%0xLP@\7qb;{w8S]S:XTMK0E'W4:&FO(;`Azr+vBBsw/HK3=T\VF
+ C</NL~(u|6m$bsRn4r08sB@&&=-fM>b0<M(l848Rz0$%&fPO
+X-Face: .B0zP5wUexDM7z=qm]Ya]-QOcqdR$j-K{Q>Eao35{>Ht(WzqL:P)K3g|:R#,SlliL|K;#Q}
+ 2E?\{Qs1(M-WH%`QM,as2n]oO-P!smTW{?h6cNyn(72"`3P:F\2->Q(cP1-Y$Fg*N1fVYD&6&Ku-7+
+ ^GVcI/Scz|6mOyLz[!$2VR8CA./{89h@u}*c2o9ipNt4Hl*
+X-Face: Zud>ESuW^+vP,WS<n@^XrUnMUBW)KsH#bpENK9)Feo;5=cmy`5!$vLS.Sz}a8H<F,?[ZS74
+ c#jA6Vmix=Z[U3pC"bLj'+$7qWCm:`vI'F2U]80TD]8;o.`4=Tr{^K6~i?b"I)g[uxHr\?Sk"<xND#
+ yeaQ>cB$(Klt0]m4{|4s2.4}w4n[mfX`[>2F8hqarb<T:7*
+X-Face: .|.ljyIEa2FiT;J`qWrI#_mADKjuC+wd!RKKd#8<\FTgg#snmwasw6k15?(5_T#};9",h7*
+ *ak709sdlE|oh.BFD6tMG.O|P"%1'/6&x_Y)1Rb3je3NUBXi2RS=LC?*:D;eu&KZIe#Z"P}S]hVXXX
+ ^{)FZg`6=XY;t3o>^GIoq5raf<z6+B0Poe)$,+\P0'i8Y)X
+X-Face: $A(_4y>v7Y\BBL|%/6],*r?cc%!^qrV"uWUS~F<]g>WS'~k8?IqL[";qqD14}QM]OfhSaPY
+ GP)#J5ge;8OmCXH24b=v/FWA7D;Ed~tf{'-Y\feJyy}~OT<&tb\Gw0>aW#ubXY<]Sn-:VZbBd_c/$z
+ CCpko)nK:`<ENeprnL.j2zv3vAL2]'(M\}?}/QAcftR0vf?A
+X-Face: -*Mu`'i]ds*VxEM",s5SVfa'YKSX/HclG-5d*zC|@M~(ruN]4Kt-Uv$!<C'J*)^n}[CQ(@E
+ `C>`g@yYd5*gO'hZLr[ma,sJi7b5>CV^Fb0"rR']-o*Qr#u5P'yc:44&';\BuIDHYy%xp4Sgh/9)6]
+ m33rN:y,NhGGCqoU.=b>@Qpv;go00eO&BchNVJm]MIgQq5M4

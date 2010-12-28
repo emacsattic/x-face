@@ -1,0 +1,861 @@
+x-face.el v1.3 取扱い説明書
+                             山岡克美                <yamaoka@jpl.org>
+                             市川達哉               <ichikawa@jpl.org>
+                             奥西藤和 <fuji0924@mbox.kyoto-inet.or.jp>
+                             小関吉則        <kose@yk.netlaputa.or.jp>
+                             岡田健一               <okada@opaopa.org>
+                             寺西裕一            <teranisi@gohome.org>
+                             高橋郁                 <kaoru@kaisei.org>
+                             上野乃毅              <ueno@unixuser.org>
+                             木下達也            <tats@vega.ocn.ne.jp>
+----------------------------------------------------------------------
+0. NEWS
+
+  今や Emacs 21 用の X-Face utility が利用可能です。
+
+  ftp://ftp.jpl.org/pub/elisp/x-face-e21.el.gz
+
+  新しい再描画エンジンを持つ Emacs 21 を使っている人は、それを使うこと
+  を強く勧めます。
+
+  v1.3.6.14 から XEmacs で多階調 X-Face を表示する機能を盛り込みました。
+  v1.3.6.14 と v1.3.6.15 では netpbm パッケージが必須でしたが、
+  v1.3.6.16 以降では elisp だけで実装しているので不要です。ただし速度
+  向上などの目的で、将来は復活させるかもしれません。
+
+  Gnus や T-gnus は自前で多階調 X-Face を表示しますが、代わりにこれを
+  使いたい場合は、例えば以下のようなことを行なって下さい。
+
+  (setq gnus-treat-display-grey-xface nil)
+
+  v1.3.6.13 から、第一行目にデータが無い X-Face フィールドも扱えるよう
+  になりました。また x-face-xmas.el において、wl-highlight-x-face-func
+  の値を強制的に変更してしまうのをやめました。
+
+  v1.3.6.12 から XEmacs 上の Wanderlust で使う関数
+  `x-face-xmas-wl-display-x-face'
+  を、引数無しで呼べるようにしました。
+
+  v1.3.6.4 から XEmacs で animated X-Face を表示する機能を盛り込みまし
+  た。
+
+  v1.3 から XEmacs だけで使うプログラムなどを分離して x-face-xmas.el
+  というファイルに納めました。が、まだ分離は不充分です。
+
+  v1.2.7 からカラー/マルチ X-Face が扱えるようになっています。カラーイ
+  メージをファイルにセーブするときと外部 viewer で見るときのフォーマッ
+  トは、XPM か非圧縮の BMP (OS/2 または Windoze) のどちらかを選択する
+  ことができます。XEmacs でインライン表示する方法については 6. XEmacs
+  の項を、それ以外については 7. その他 の項をご覧下さい。
+  カラー/マルチのためにヘッダに複数の X-Face フィールドを挿入するこの
+  方法は、まだ世の中で認知されたものではありません。(^^;;)
+  いちおう、規格書ふうの読み物を METHOD.ja として添付しました。
+----------------------------------------------------------------------
+1. 必要なもの。
+
+  外部コマンドとして compface と uncompface が必要です。例えば
+
+    ftp://ftp.win.ne.jp/pub/misc/compface-1.4.tar.gz
+
+  などを持ってきてコンパイルし、適当なディレクトリにインストールして下
+  さい。XEmacs を --with-xface で作るときに必要な compface.h はこのアー
+  カイブに含まれていて、libcompface.a も作ることができます。
+  それからイメージファイルを見ることができる viewer として xv など、お
+  よび gzip や bzip2 も設定によっては必要です。
+----------------------------------------------------------------------
+2. Install.
+
+  x-face.el を byte-compile-file して、load-path のディレクトリにでき
+  上がった x-face.el と x-face.elc をコピーして下さい。
+  XEmacs で使う方 はこのパッケージを gunzip | tar で展開したディレクト
+  リで (*) x-face-xmas.el も byte-compile-file して、x-face-xmas.el と
+  x-face-xmas.elc を同様にインストールして下さい。
+  その際必ず .elc ファイルのタイムスタンプが .el より新しくなるように
+  しなければなりません。
+  VM もしくは Mew をお使いの場合には VM もしくは Mew がインストールさ
+  れているディレクトリが load-path に含まれている状態でコンパイルして
+  下さい。簡単には VM もしくは Mew を起動した後でコンパイルして下さい。
+
+  運が良ければ添付した Makefile が使えるかもしれません。使い方の説明が
+  README-Makefile.ja にありますので、こちらも試してみて下さい。
+
+  (*) 作業ディレクトリに logo のイメージファイルがあれば、このディレク
+      トリでなくても構いません。逆に *.elc が load されるときに表示さ
+      れる splash 画面がうっとおしいならば、logo のイメージファイルが
+      無い状態で byte-compile-file するか、x-face-inhibit-loadup-splash
+      という変数の値を non-nil にして下さい。
+
+  もし byte-compile-file した *.elc ファイルが正常に動作しないときは、
+  すでにインストールされている古い x-face.el と x-face.elc を (XEmacs
+  の場合は x-face-xmas.el と x-face-xmas.elc も) 消去してから Emacsen
+  を起動し直して、再度 byte-compile-file してみて下さい。
+----------------------------------------------------------------------
+3. autoload の設定。
+
+  ~/.emacs に次のように書いて下さい。
+
+(autoload 'x-face-encode "x-face"
+  "Generate X-Face string(s) from xbm file." t)
+(autoload 'x-face-insert "x-face"
+  "Insert X-Face fields." t)
+(autoload 'x-face-save "x-face"
+  "Save X-Face fields to files." t)
+(autoload 'x-face-view "x-face"
+  "View X-Face fields." t)
+(autoload 'x-face-ascii-view "x-face"
+  "View X-Face fields as ascii pictures." t)
+
+; XEmacs の場合のみ。詳細は 6. XEmacs の項をご覧下さい。
+(autoload 'x-face-xmas-display-x-face "x-face"
+  "Display X-Face fields as XEmacs-glyph." t)
+(autoload 'x-face-xmas-force-display-x-face "x-face"
+  "Display X-Face fields compulsorily as XEmacs glyph.")
+(autoload 'x-face-xmas-remove-x-face-glyph "x-face"
+  "Remove X-Face images and some text-properties.")
+
+  最低これだけ書いておけば GNUS または Gnus と mh-e, RMAIL, VM, cmail
+  および Mew で使えるはずですが、他の Newsreader/Mailer を使ったり環境
+  やユーザの好みに合わせて変えたい場合、あるいは Wanderlust を XEmacs
+  で使う場合には、後述の 5. Customize や 6. XEmacs の項を 参照して下さ
+  い。
+----------------------------------------------------------------------
+4. 使い方。
+
+・Decode and view
+  デフォルトの設定では gnus-summary-mode, gnus-Subject-mode,
+  wl-summary-mode, cmail-summary-mode, mh-folder-mode, rmail-mode,
+  vm-summary-mode, mew-summary-mode, mew-virtual-mode の各バッファにカー
+  ソルがある場合と、送信するメッセージを編集しているバッファのようにカ
+  レントバッファに X-Face フィールドがある場合に、
+
+        M-x x-face-view
+
+  とタイプすると xv (変数 x-face-viewer-program で指定された viewer)
+  で face を表示します。
+
+  キャラクタ端末で xv などが使えない場合でも、M-x x-face-ascii-view と
+  タイプすると、48桁×24行の ascii picture で face を表示します。
+  (もちろん X の端末でも使えます。)
+
+・Decode and save
+  デフォルトの設定では gnus-summary-mode, gnus-Subject-mode,
+  wl-summary-mode, cmail-summary-mode, mh-folder-mode, rmail-mode,
+  vm-summary-mode, mew-summary-mode, mew-virtual-mode の各バッファに
+  カーソルがある場合と、送信するメッセージを編集しているバッファのよう
+  にカレントバッファに X-Face フィールドがある場合に、
+
+        M-x x-face-save
+
+  とタイプすると所定のディレクトリにイメージファイルとしてセーブします。
+
+・Encode
+  適当な xbm ファイルを用意しておいて
+
+        M-x x-face-encode
+
+  とタイプするとエンコードした X-Face フィールドの文字列を表示します。
+
+        C-u M-x x-face-encode
+        ESC 1 M-x x-face-encode
+
+  などと引数を付けて使うと elisp 式でエンコードした文字列を表示します。
+  ( C-u は universal-argument コマンドのデフォルトのキー設定です。)
+
+  イメージサイズは不問ですが、48x48 より小さい場合は余白を付け、大きい
+  場合は必要なら縦横が 48 の自然数倍になるように余白を付けて、それぞれ
+  48x48 のサイズで分割した複数のエンコード結果を返します。
+
+・Insert
+  適当な xbm ファイルを用意しておいて
+
+        M-x x-face-insert
+
+  とタイプするとカレントバッファの適切な位置に X-Face フィールドを挿入
+  します。イメージサイズは不問です。
+  configure オプションを --with-xface --with-xpm にして作った XEmacs
+  ではデフォルトで encoded string を隠して直接イメージを表示することが
+  できます。詳しいことは 6. XEmacs の項をご覧下さい。
+
+  また、引数を付けて M-x x-face-insert を実行すると、すでに存在する
+  X-Face フィールドを消さずに挿入することができます。具体的には
+
+        C-u M-x x-face-insert
+        ESC 1 M-x x-face-insert
+
+  などとタイプします。
+
+   (注) gnus-summary-mode, gnus-Subject-mode, wl-summary-mode,
+        cmail-summary-mode, mh-folder-mode, rmail-mode, vm-summary-mode,
+        mew-summary-mode, mew-virtual-mode
+        の各バッファというのはそれぞれ次のようなものです。
+
+        gnus-summary-mode (GNUS v3.15 以降と Gnus)
+        gnus-Subject-mode (GNUS v3.14.4 以前)
+                ニュース記事のサブジェクト一覧が表示されているバッファ。
+        wl-summary-mode
+        cmail-summary-mode
+        mh-folder-mode
+        vm-summary-mode
+        mew-summary-mode, mew-virtual-mode
+                メールのサブジェクト一覧が表示されているバッファ。
+        rmail-mode
+                メールの内容が表示されているバッファ。
+----------------------------------------------------------------------
+5. Customize.
+
+  以下のように .emacs に書いておくことによってカスタマイズができます。
+  また、比較的新しい custom パッケージがあれば、M-x customize または
+  M-x customize-group を使って編集することもできます。
+
+(setq x-face-image-file-directory "~/x-faces")
+; イメージファイルを通常置いておくディレクトリの指定です。
+; 以前の変数名 x-face-xbm-file-directory は暫定的に有効にしていますが、
+; なるべくこの新しい名前を使うようにして下さい。
+
+(setq x-face-image-file-directory-for-save "~/x-faces")
+; イメージファイルをセーブするためのディレクトリ名の指定です。
+; デフォルト値は x-face-image-file-directory と同じです。
+
+(setq x-face-default-xbm-file "myface.xbm")
+; 主に自分の X-Face 用に使う xbm ファイルの名前を指定します。
+; もし x-face-image-file-directory で設定したディレクトリ以外の場所に
+; 置いておく場合は、ディレクトリ名も含めて記述して下さい。
+; この変数には "myface.xbm.gz" または "myface.xbm.bz2" というように
+; gzip や bzip2 で圧縮されたものを指定することが可能で、"myface.xbm"
+; を設定した場合でも "myface.xbm.gz" や "myface.xbm.bz2" が存在する場
+; 合はそれが使われます。逆にこの変数に例えば "myface.xbm.gz" を設定し
+; てもそれが実在ではなくて、"myface.xbm.bz2" や "myface.xbm" が存在し
+; ている場合にはそれが使われます。
+
+(setq x-face-insert-interactive t)
+; 関数 'x-face-insert を手動のコマンドとして使う場合以外でも、この変数
+; を t にしておくと挿入するファイル名を尋ねるようになります。
+; そのときの気分に応じて face を変えるような場合に便利でしょう。
+
+(setq x-face-compressor 'gzip)
+; 'gzip または 'bzip2 を設定しておくと X-Face をセーブするときに gzip
+; または bzip2 で圧縮します。nil では圧縮しません。
+
+(setq x-face-compressor-program-list
+      '((gzip ".gz" "gzip" "-c9" "GZIPping" "gzip" "-cd" "GUNZIPping")
+	(bzip2 ".bz2" "bzip2" "-f" "BZIPping" "bzip2" "-d" "BUNZIPping")))
+; 圧縮伸長方法を指定するリストです。
+; それぞれのエレメントは変数 x-face-compressor で指定するシンボル、ファ
+; イル名のサフィックス、圧縮プログラム、圧縮時の引数、圧縮時のメッセー
+; ジ、伸長プログラム、伸長時の引数、伸長時のメッセージで構成されます。
+; プログラム名は必要なら絶対パスを使って下さい。
+
+(setq x-face-user-x-face-variable-name "x-face-default-encoded-string")
+; C-u M-x x-face-encode の出力で使う変数名の指定です。
+; ま これはどうでも良いでしょう。
+
+(setq x-face-compface-program "compface")
+(setq x-face-uncompface-program "uncompface")
+(setq x-face-viewer-program "xv")
+; パスが設定されていないディレクトリに外部コマンドのファイルを置いてい
+; る場合は、"/usr/local/bin/X11/xv" などとフルパスで記述して下さい。
+; なお x-face-viewer-program には system-type が OS/2 または windows-nt
+; だった場合はそれぞれ "pmview" か "start" が、それ以外の場合は "xv"
+; がデフォルトで設定されます。
+
+(setq x-face-viewer-options '("-nodecor" "-quit" "-"))
+; これは viewer program の引数の list です。x-face-view-asynchronous
+; という変数 (後述) が t の場合には必ず参照するものではありません。
+; xv 以外のものや古〜い xv を使う場合は適宜修正して下さい。
+
+(setq x-face-icons-to-color-picture-function 'x-face-icons-to-xpm)
+; カラー X-Face を見たりセーブするときに、イメージフォーマットに変換す
+; るための関数を指定します。現在 XPM、OS/2-BMP および Windoze-BMP の各
+; イメージをエンコードするための関数が用意されていて、デフォルト値は
+; system-type の値によってそれぞれ以下のように設定されます。
+;
+;       'OS/2           'x-face-icons-to-os2-bmp
+;       'windows-nt     'x-face-icons-to-win-bmp
+;       上記以外        'x-face-icons-to-xpm
+;
+; いずれも X-Face フィールドを uncompface で icon フォーマットに変換し
+; た後で使うものです。
+
+(setq x-face-view-asynchronous nil)
+; t にしておくと M-x x-face-view で非同期に viewer を起動します。
+; すなわち、nil の場合には viewer を終了させるまで Mule/NEmacs/XEmacs
+; の操作ができなくなりますが、t では face を見ながらキーボード操作がで
+; きます。
+; OS/2 の場合はデフォルトで t にしてあります。というのは xbm を表示で
+; きる VIO版アプリケーションがないので PMView などの PM版グラフィック
+; ビューアを使わざるを得ないのですが、PMアプリケーションは標準入出力を
+; 扱えない仕様となっているためです。変数が nil の場合には標準出力され
+; るのに対し、t の場合はテンポラリファイルに書き出されるので PM版でも
+; 問題なく使えるというわけです。X-Free86 for OS/2 で xv が使えるものの、
+; 肝心の OS/2 Mule が xterm 上では VIOモードでもまともに使えません。:-)
+; PMX で xv は動くはずですが、PMMule から動かせるかどうか調べてません。
+
+(setq x-face-view-asynchronous-function {関数シンボル or 関数定義})
+; x-face-view-asynchronous が t のときに使う関数の設定です。引数として
+; 表示すべきファイルの絶対パス名が渡されます。
+
+(setq x-face-viewer-startup-time 10)
+; 外部 viewer を起動して表示するファイルを読み込むまでの最大時間を秒数
+; で設定します。x-face.el から外部 viewer を起動した後でこの時間が経過
+; するとファイルを消します。
+
+(setq x-face-save-or-view-method-alist
+      '(
+	(gnus-summary-mode
+	 . (gnus-summary-show-article
+	    x-face-find-gnus-article-buffer
+	    gnus-summary-show-article))
+	(gnus-Subject-mode
+	 . (gnus-Subject-show-article
+	    x-face-find-gnus-article-buffer
+	    gnus-Subject-show-article))
+	(wl-summary-mode
+	 . (x-face-wl-get-article
+	    x-face-extracted-headers-buffer))
+	(cmail-summary-mode
+	 . (x-face-cmail-get-article
+	    x-face-extracted-headers-buffer))
+	(mh-folder-mode
+	 . (x-face-mh-get-article
+	    x-face-extracted-headers-buffer))
+	(vm-summary-mode
+	 . (x-face-vm-get-all-headers
+	    x-face-extracted-headers-buffer))
+	(mew-summary-mode
+	 . (x-face-mew-get-article
+	    x-face-extracted-headers-buffer))
+	(mew-virtual-mode
+	 . (x-face-mew-get-article
+	    x-face-extracted-headers-buffer))
+	))
+; 色々な Newsreader/Mailer で M-x x-face-{save,view} できるようにする
+; ための変数で、各 cell は次のような構造にします。
+;
+;     (MAJOR-MODE . (PREPARE-FUNCTION BUFFERorFUNCTION POST-FUNCTION))
+;
+; M-x x-face-{save,view} したときのカレントバッファの major-mode が
+; MAJOR-MODE だったら、まず PREPARE-FUNCTION を実行し、実行し終わった
+; ときに X-Face フィールドが存在するはずのバッファを BUFFER で指定しま
+; す。
+;
+; BUFFER に関数が指定されていた場合は、その評価結果を採用します。
+; x-face-find-gnus-article-buffer と mew-buffer-message がこれに該当し
+; ます。
+;
+; POST-FUNCTION は {save,view} し終わってから後始末のために実行する関
+; 数の指定です。
+;
+; カレントバッファに X-Face が存在しているときに M-x x-face-{save,view}
+; するためには、特別な設定は不要です。
+
+  毎回 M-x x-face-{save,view} とタイプするのが面倒ならば、以下のように
+  キーを設定することもできます。
+
+(add-hook 'gnus-summary-mode-hook
+	  (function
+	   (lambda ()
+	     (define-key (current-local-map) "\C-x4s" 'x-face-save)
+	     (define-key (current-local-map) "\C-x4v" 'x-face-view)
+	     (define-key (current-local-map) "\C-x4a" 'x-face-ascii-view)
+	     )))
+; Gnus や GNUS (v3.15 以上) 以外では gnus-summary-mode-hook の代わりに
+; 以下の hook を使って下さい。
+;       GNUS (v3.14.4 以下)             gnus-Subject-mode-hook
+;       Wanderlust                      wl-summary-mode-hook
+;       cmail                           cmail-summary-mode-hook
+;       RMAIL                           rmail-mode-hook
+;       mh-e                            mh-folder-mode-hook
+;       VM                              vm-summary-mode-hook
+;       Mew                             mew-summary-mode-hook
+;                                       mew-virtual-mode-hook
+
+; NEmacs には add-hook がありませんから、関数定義を追加 (後述) するか
+; 通常の方法を使って下さい。以下も同様です。
+
+  送信するメッセージに X-Face フィールドを自動付加するには、例えば次の
+  ようにして下さい。XEmacs の場合はこの方法の代わりに 6. XEmacs. の項
+  で説明する方法を推奨します。
+
+(add-hook 'gnus-message-setup-hook 'x-face-insert)
+; Gnus (v5.4 以上) では、こうすると x-face-default-xbm-file で指定した
+; xbm ファイルの内容がエンコードされて挿入されます。
+; また、変数 x-face-insert-interactive を t にしておくと毎回挿入するファ
+; イル名を尋ねるようになります。
+; デフォルト以外のファイルを使いたい場合は次のように書きます。
+(add-hook 'gnus-message-setup-hook
+	  (function
+	   (lambda ()
+	     (x-face-insert "FILENAME"))))
+; Gnus (v5.4 以上) 以外では gnus-message-setup-hook の代わりに以下の
+; hook を使って下さい。
+;       Gnus (v5.2 以上)            message-setup-hook
+;       Gnus (v5.1 以下) と GNUS    news-setup-hook
+;       Wanderlust                  wl-mail-setup-hook
+;       cmail                       cmail-mail-hook or mail-setup-hook
+;       MAIL/RMAIL/VM               mail-setup-hook
+;       mh-e                        mh-letter-mode-hook
+;       Mew                         mew-draft-mode-hook
+
+  また、以下ような hook を設定しておくと、送信メッセージを書き始めると
+  きに X-Face フィールドを付加するかどうかを (y or n) で選択できるよう
+  になります。(これは mail-setup-hook に設定する例です。)
+
+(add-hook 'mail-setup-hook
+	  (function
+	   (lambda ()
+	     (and (y-or-n-p "X-Face ヘッダを付けますか? ")
+		  (call-interactively 'x-face-insert)
+		  ))))
+
+  x-face-insert で X-Face フィールドを付加した直後に評価される hook と
+  して x-face-insert-hook があります。これが評価されるときの (point)
+  は X-Face フィールドの行頭です。
+  それから、x-face-add-x-face-version-header という変数を t にしておく
+  と、x-face-insert したときに X-Face-Version という、この program の
+  version を表すフィールドを併せて付加しますので、もしよろしければ使っ
+  て下さい。
+
+  v1.2.8 からバージョン 19 以上の Emacsen でメニューが使えるようになっ
+  ています。メニューを有効にするには .emacs に次のように書いて下さい。
+
+(autoload 'x-face-define-menu "x-face" "Define menu.")
+(add-hook 'HOOK 'x-face-define-menu)
+
+  HOOK には例えば以下のようなものが使えますので、必要に応じて追加して
+  下さい。
+
+    MUA         受信                        送信
+  ------------------------------------------------------------------
+    Gnus:       gnus-summary-mode-hook      gnus-message-setup-hook
+    Wanderlust: wl-summary-mode-hook        wl-mail-setup-hook
+    cmail:      cmail-summary-mode-hook     mail-setup-hook
+    mh-e:       mh-folder-mode-hook         mh-letter-mode-hook
+    RMAIL:      rmail-mode-hook             mail-setup-hook
+    VM:         vm-summary-mode-hook        mail-setup-hook
+    Mew:        mew-summary-mode-hook       mew-draft-mode-hook
+                mew-virtual-mode-hook
+
+  あるいは、これら全部を引っくるめて
+
+(mapcar
+ (function (lambda (hook) (add-hook hook 'x-face-define-menu)))
+ '(gnus-message-setup-hook gnus-summary-mode-hook
+   wl-summary-mode-hook wl-mail-setup-hook
+   cmail-summary-mode-hook
+   mail-setup-hook
+   mh-folder-mode-hook mh-letter-mode-hook
+   rmail-mode-hook vm-summary-mode-hook
+   mew-draft-mode-hook mew-summary-mode-hook mew-virtual-mode-hook))
+
+  などと書いてしまっても実害は無いでしょう。
+
+  メニューから使えるコマンド x-face-menu-insert x-face-menu-encode を
+  手動で M-x したり hook などで使う場合には、
+
+(require 'x-face)
+
+  または
+
+(autoload 'x-face-menu-insert "x-face" "Insert X-Face with menu." t)
+(autoload 'x-face-menu-encode "x-face"
+  "Generate X-Face string(s) from xbm file with menu." t)
+
+  といった記述を追加して下さい。
+----------------------------------------------------------------------
+6. XEmacs.
+
+  configure オプションを --with-xface --with-xpm にして作った XEmacs
+  を使うと、メールやニュースの記事を読むときと送信バッファを編集すると
+  きに、直接イメージを表示することができます。XEmacs で多用されている
+  highlight-headers.el の変数 highlight-headers-hack-x-face-p が nil
+  だった場合は highlight-headers の仕様に合わせてイメージを表示しない
+  ようにしています。
+
+【メールやニュースを読むときのインライン表示】
+  インライン表示するために五つの方法を用意しています。
+
+ (1) highlight-headers.el の関数 highlight-headers の置き換え。XEmacs
+     で多くの Mailer/Newsreader を使う上で必須とも言える tm または
+     SEMI、および Mew の旧版でもこれを使っています。
+     Gnus が自身で設定する gnus-article-display-hook を無効にする必要
+     があります。
+ (2) Gnus だけは Gnus が持っているさまざまなヘッダを修飾する機能を使い、
+     それ以外は tm または SEMI の関数
+     mime-preview-x-face-function-use-highlight-headers (ここでも
+     highlight-headers を利用しています) を置き換えます。Gnus の変数
+     gnus-article-x-face-command に x-face-xmas-display-x-face を設定
+     する必要があります。
+ (3) Gnus の変数 gnus-article-x-face-command に
+     x-face-xmas-display-x-face を設定。(2) と同じですが、tm または
+     SEMI を使わない場合はこれだけを行なって下さい。
+ (4) Pterodactyl Gnus やこれをベースにした T-gnus では gnus-treat の機
+     能を使います。T-gnus で使う場合の設定例を載せました。
+ (5) Wanderlust 2.7.0 以降では wl-highlight-x-face-function という変数、
+     Wanderlust 2.6.x 以前では wl-highlight-x-face-func という変数に
+     X-Face を表示するための関数を設定することができます。
+     samples/{en,ja}/dot.wl に例がありますが、ここにも載せておきます。
+ (6) Mew 1.92 以降では highlight-headers を使わなくても済むようになっ
+     たので、(1) の関数の置き換えは不要です。下記に従って下さい。
+
+  それぞれ次のように .emacs に書き入れて下さい。(1) か (2) の設定を行
+  なう場合、他の autoload の設定は一切必要ありません。
+
+;(1) 関数 highlight-headers の置き換え。
+(require 'x-face)
+(setq gnus-article-display-hook nil)
+(x-face-xmas-replace-highlight-headers)
+
+  gnus-article-display-hook は gnus.el の中で defcustom による設定が行
+  なわれるので、gnus.el が load される前に変数として存在していれば Gnus
+  は何もしません。したがってこの例のように nil にする以外に、何らかの
+  関数を add-hook することもできます。
+
+;(2)
+(require 'x-face)
+(setq gnus-article-x-face-command 'x-face-xmas-display-x-face)
+(x-face-xmas-replace-highlight-headers)
+;    tm を使う場合。
+(x-face-xmas-replace-x-face-function-for-tm)
+;    SEMI を使う場合。
+(x-face-xmas-replace-x-face-function-for-semi)
+
+  (1) と (2) については (require 'x-face) する代わりにすべて autoload
+  にすることもできないことはないのですが、他のライブラリが load される
+  順序によってはうまくいかないので、上記の設定をとりあえず推奨しておき
+  ます。
+
+;(3) tm または SEMI 無しで Gnus を使う場合。
+(setq gnus-article-x-face-command 'x-face-xmas-display-x-face)
+
+;(4) T-gnus で使う場合の設定例。.gnus ファイルに書いて下さい。
+(setq
+ gnus-article-treat-types '("text/plain" "text/x-rot13-47-48")
+ gnus-cite-minimum-match-count 1
+ gnus-treat-highlight-signature '(and mime last)
+ gnus-treat-buttonize nil
+ gnus-treat-buttonize-head nil
+ gnus-treat-emphasize nil
+ gnus-treat-highlight-headers '(and mime head)
+ gnus-treat-highlight-citation 'mime
+ gnus-treat-date-local '(and mime head)
+ gnus-treat-display-xface '(and mime head)
+ gnus-treat-display-smileys nil
+ gnus-treat-display-picons nil
+ gnus-treat-decode-article-as-default-mime-charset '(not head)
+ gnus-article-x-face-command 'x-face-xmas-display-x-face
+ )
+
+;(5) Wanderlust で使う場合の設定例。.wl ファイルに書いて下さい。
+;    ご注意: Wanderlust 2.7.0 以降では下記の通りに
+;            wl-highlight-x-face-function を使って下さい。
+;            Wanderlust 2.6.x 以前のものを使う場合は、代わりに
+;            wl-highlight-x-face-func を使って下さい。
+(when window-system
+  (cond ((and (featurep 'xemacs)	; for XEmacs
+	      (module-installed-p 'x-face))
+	 (autoload 'x-face-xmas-wl-display-x-face "x-face" nil t)
+	 (setq wl-highlight-x-face-function 'x-face-xmas-wl-display-x-face))
+	;; for Mule (GNU Emacs)
+	((module-installed-p 'x-face-mule)
+	 ;; for x-face-mule distributed with bitmap-mule 8.0 or later
+	 (autoload 'x-face-decode-message-header "x-face-mule")
+	 (setq wl-highlight-x-face-function 'x-face-decode-message-header))
+	))
+
+  x-face-xmas-wl-display-x-face という関数は以前から存在した
+  x-face-xmas-mew-display-x-face と同じ内容です。後者が前者の alias に
+  なっています。
+
+;(6) Mew 1.93 以降で使う場合。
+(autoload 'x-face-xmas-mew-display-x-face "x-face")
+(setq mew-use-highlight-x-face-function 'x-face-xmas-mew-display-x-face)
+;    何が何でも highlight-headers を load しない。:-p
+;(provide 'highlight-headers)
+
+  Mew 1.92 と 1.93b2 以前では mew-use-highlight-x-face-function の代わ
+  りに mew-opt-highlight-x-face-function を使って下さい。
+
+【送信バッファなどでのインライン表示】
+  コマンド M-x x-face-insert を使って手動で挿入した X-Face フィールド
+  を、デフォルトでは encoded string を隠して直接イメージを表示するよう
+  になっています。表示する位置は From フィールドがある場合はそこ、無い
+  場合は X-Face フィールドになります。
+  表示/非表示は M-x x-face-xmas-display-x-face でトグルに切替えること
+  ができますが、M-x x-face-insert を手動で実行した直後にイメージを表示
+  させたく無い場合は、.emacs に
+
+(setq x-face-xmas-auto-image nil)
+
+  と書いておいて下さい。変数 highlight-headers-hack-x-face-p を nil に
+  してもイメージを表示しなくなります。
+  コマンド x-face-xmas-display-x-face に与える引数が正の整数だった場合
+  はイメージを強制表示し、負の整数だった場合は強制非表示になります。
+  それ以外の場合には表示/非表示のトグル切替えを行ないます。
+  (関数 x-face-xmas-remove-x-face-glyph は x-face-xmas-display-x-face
+   に負の整数の引数を与えた場合と同じ動作をします。)
+
+  また M-x x-face-xmas-display-x-face を `ESC t' キーに割り当てる方法
+  を下に示します。
+
+(add-hook 'HOOK
+	  (lambda ()
+	    (define-key (current-local-map)
+	      "\M-t" 'x-face-xmas-display-x-face)
+	    ))
+; HOOK にはお使いになる Newsreader/Mailer によって、それぞれ以下のもの
+; を使って下さい。
+;
+;       Gnus                    gnus-message-setup-hook
+;       Wanderlust              wl-mail-setup-hook
+;       MAIL/RMAIL/VM/cmail     mail-setup-hook
+;       mh-e                    mh-letter-mode-hook
+;       Mew                     mew-draft-mode-hook
+
+
+  手動で M-x x-face-insert する以外に、送信バッファを編集し始めるとき
+  に X-Face フィールドを自動付加して、かつイメージを表示させたいときは
+  次のように hook を設定して下さい。
+   **---------------------------------------------------------------**
+   ** 5. Customize. で説明した hook の設定                          **
+   ** ...送信するメッセージに X-Face フィールドを自動付加するには...**
+   **    の代わりに使って下さい。                                   **
+   **                                                               **
+   **    ただし Mew 1.91 以前のものを使う場合は 5. Costomize. の    **
+   **    説明のままで良く、以下のように書き換える必要はありません。 **
+   **---------------------------------------------------------------**
+
+(add-hook 'HOOK
+	  (lambda ()
+	    (x-face-insert)
+	    (x-face-xmas-force-display-x-face) ; Mew 1.91 以前では不要
+	    ))
+; x-face-default-xbm-file で指定した xbm ファイルの内容がエンコードされ、
+; かつイメージを表示します。HOOK にはお使いになる Newsreader/Mailer に
+; よって、それぞれ以下のものを使って下さい。
+;
+;       Gnus                    gnus-message-setup-hook
+;       Wanderlust              wl-mail-setup-hook
+;       cmail                   cmail-mail-hook or mail-setup-hook
+;       mh-e                    mh-letter-mode-hook
+;       MAIL/RMAIL/VM           mail-setup-hook
+;
+; Wanderlust では ~/.xface ファイルに X-Face の encoded string があれ
+; ばそれが insert されますが、hook の関数に (x-face-insert) が含まれて
+; いると上書きしてしまいます。~/.xface ファイルの方を有効にするには上
+; 記の hook は使わずに
+;
+;(setq wl-highlight-x-face-func 'x-face-xmas-force-display-x-face)
+;
+; などの設定を行なってイメージを表示して下さい。
+
+  デフォルト以外のファイルを使いたい場合は次のように書きます。
+
+(add-hook 'HOOK
+	  (lambda ()
+	    (x-face-insert "FILENAME")
+	    (x-face-xmas-force-display-x-face) ; Mew 1.91 以前では不要
+	    ))
+
+  また、以下ような hook を設定しておくと、送信メッセージを書き始めると
+  きに X-Face フィールドを付加するかどうかを (y or n) で選択できるよう
+  になります。
+
+(add-hook 'HOOK
+	  (lambda ()
+	    (when (y-or-n-p "X-Face ヘッダを付けますか? ")
+	      (x-face-insert)
+	      (x-face-xmas-force-display-x-face) ; Mew 1.91 以前では不要
+	      )))
+
+  From フィールドにイメージを表示しているときは X-Face フィールド全体
+  を隠して、From フィールドと X-Face フィールド全体を read-only にしま
+  す。
+  X-Face フィールドにイメージを表示しているときは encoded string を隠
+  して X-Face フィールド全体を read-only にします。
+
+  いずれも見えなくなってしまった領域を不用意に書き変えてしまわないため
+  の対策なのですが、read-only にした後でさらにヘッダを書き変えるような
+  処理が行なわれると、その処理の正しい結果が得られなかったりエラーで止
+  まってしまう場合があります。
+  もしそのような事態が不幸にして起こってしまうようでしたら、簡単には
+
+(setq x-face-xmas-inhibit-read-only t)
+
+  と .emacs に書いておくと、見えないヘッダの領域を read-only にしない
+  ようにすることができます。
+  もっと良いのは、ヘッダを書き変えるプログラムが実行されるより前に
+
+        (x-face-xmas-remove-x-face-glyph)
+
+  を実行して read-only の属性を消してしまうことです。
+  例えば tm の mime-editor/preview-message や SEMI の mime-edit-preview-
+  message コマンドを実行したときに、read-only な領域の隣りにフィールド
+  を挿入する際に起こるエラーを回避するには、.emacs で次のような hook
+  を設定しておくと良いでしょう。どうやら Gnus では必須のようです。
+
+(add-hook 'mime-editor/translate-hook 'x-face-xmas-remove-x-face-glyph) ; tm
+(add-hook 'mime-edit-translate-hook 'x-face-xmas-remove-x-face-glyph) ; SEMI
+
+【表示スタイル】
+  x-face.el では From: フィールドに X-Face を表示 (*1) したり、複数の
+  X-Face を表示するときの順序 (*2) が、デフォルトでは Gnus ふうになっ
+  ています。これを highlight-headers ふうにしたい場合は .emacs に次の
+  ような記述を追加してください。
+
+(setq x-face-xmas-like-highlight-headers t)
+
+  なお、x-face-xmas-replace-highlight-headers で置き換えられた関数
+  highlight-headers は無条件でオリジナルと同じ仕様になります。
+
+  (*1) "From:■ foo@bar" が Gnus ふう、
+       "From: ■foo@bar" が highlight-headers ふうです。
+
+  (*2) ヘッダに存在する X-Face を上から順にイメージに変換して、左から
+       はじめて右に向かって並べるのが Gnus ふう、highlight-headers は
+       右からはじめて左に向かって並べます。
+
+【メニュー】
+  メニューから Encode または Insert を実行した場合に、XEmacs では
+  dialog box にイメージを表示します。この dialog box のサイズは
+
+(setq x-face-xmas-dialog-frame-alist
+      '((width . 48) (height . 16) (left . 0) (top . -1)))
+
+  のように設定することができます。デフォルトはこの通りの値です。
+  また dialog box に表示する文字フォントの高さが 16-dot 以外の場合には
+
+(setq x-face-xmas-font-height-in-dialog-box 14)
+
+  などと設定して下さい。
+  メニューに表示するイメージは最初に作ったときにキャッシュするので、２
+  回目以降は dialog box の起動が速くなります。イメージファイルの変更時
+  刻やサイズが変わったり新しいファイルが追加された場合、キャッシュの内
+  容は自動的に更新されます。
+  このキャッシュは例えば以下のように .emacs に書いておくことによってプ
+  リチャージすることも可能です。
+
+;;; x-face.elc を load するときにプリチャージする。
+(add-hook 'x-face-load-hook 'x-face-xmas-image-file-cache-precharge)
+
+;;; XEmacs を起動するときにプリチャージする。
+(require 'x-face)
+(x-face-xmas-image-file-cache-precharge)
+
+  もし x-face-image-file-directory の値がデフォルトと異なる場合は、
+  これらの前に setq で設定しておかなければなりません。
+
+【Select-XFace】
+  寺西裕一さん <teranisi@gohome.org> がお作りになった select-xface を
+  使うと、挿入する X-Face をそのイメージを見ながら選択することができ
+  ます。これは非常に便利なツールなので XEmacs のユーザの皆さんにはぜひ
+  お使いになってごらんになることをお勧めします。このプログラムは Mew
+  のパッケージに収められている他に、
+  ftp://ftp.gohome.org/pub/elisp/select-xface/ または
+  ftp://ftp.jpl.org/pub/elisp/ などの下に select-xface-*.tar.gz
+  として置かれています。
+----------------------------------------------------------------------
+7. その他。
+
+  関数 x-face-encode は手動のコマンドとして使われるとエンコード結果を
+  ポップアップしたバッファに表示しますが、プログラムから関数として呼ば
+  れた場合には戻り値としてエンコード結果を返すだけの動作になります。
+  返す値が複数ある場合のためにリストになっています。
+
+  x-face-insert コマンドを使って xbm ファイルからエンコードした X-Face
+  フィールドが複数になる場合には、自動的に X-Face-Type フィールドも挿
+  入します。ここに書かれるのは元のイメージの配置を表す情報です。
+  また特に X-Face フィールドの個数が 3 の自然数倍になる場合には、それ
+  が RGB 各色に分解されたカラー X-Face であるかどうかを尋ねます。毎回
+  尋ねられるのが煩わしいならば、その xbm ファイルの先頭に以下のような
+  コメント行を挿入して下さい。
+
+/* X-Face-Type: RGB */
+/* Type: MONO */
+
+  (残念ながらこのような行があるファイルを表示できない viewer があるよ
+   うですが ...。:-<)
+  参考までに、これらを検知するためにプログラムで使っている正規表現は、
+  "type[\t \"]*[:;=]+[\t \"]*rgb" または "type[\t \"]*[:;=]+[\t \"]*mono"
+  で、大文字/小文字の区別はしていません。
+
+  ヘッダに複数の X-Face フィールドが存在するために、Mailer/Newsreader
+  によっては次のような設定を行なう必要があります。
+
+; Gnus で送信するときに同名複数のフィールドに対する警告を抑制する。
+(setq message-syntax-checks '(
+			      (long-lines . disabled)
+			      (control-chars . disabled)
+			      (multiple-headers . disabled) ; ←これ
+			      (signature . disabled)
+			      ))
+; Mew が扱えるヘッダの上限値を大きくする。
+(setq mew-header-max-length 100)
+
+  それから、カラー X-Face を netpbm を使って作る方法を紹介しておきます。
+  まずはお絵書きツールなどを使って 48x48 またはその自然数倍のサイズの
+  イメージファイルを作りましょう。ここで色数が多かったり中間色を使って
+  いると、きれいな face を作ることができないことに注意して下さい。
+  テレビ放送のテストで使われるカラーバーの色 (白 黄 シアン 緑 マゼンタ
+  赤 青 黒) だけになっているのがベストです。例えばこれが gif だったら、
+
+% giftoppm FACE.gif > FACE.ppm
+% ppmtorgb3 FACE.ppm
+
+  こうすると 赤,緑,青 に分解された三つの pgm ファイル noname.red,
+  noname.grn, noname.blu が生成されるので、さらに
+
+% pnmcat -tb noname.red noname.grn noname.blu > FACE.pgm
+
+  こうやって縦方向に連結してから xbm に変換します。
+
+% pgmtopbm FACE.pgm > FACE.pbm
+% pbmtoxbm FACE.pbm > FACE.xbm
+
+  元のカラーイメージが 48x48 より大きい場合は、必ず *縦方向* に連結し
+  て下さい。48x48 の場合は横でも構いません。
+  最後にエディタを使ってできあがった FACE.xbm の第一行目に
+
+/* X-Face-Type: RGB */
+
+  と書き込めば終わりです。
+  (残念ながらこのような行があるファイルを表示できない viewer があるよ
+   うですが ...。:-<)
+----------------------------------------------------------------------
+8. add-hook.
+
+  NEmacs や NEpoch で add-hook を使う場合は、以下の関数定義を ~/.emacs
+  などのなるべく始めの方に書き込んで下さい。
+
+(defun add-hook (hook function &optional append)
+  "Add to the value of HOOK the function FUNCTION.
+FUNCTION is not added if already present.
+FUNCTION is added (if necessary) at the beginning of the hook list
+unless the optional argument APPEND is non-nil, in which case
+FUNCTION is added at the end.
+
+HOOK should be a symbol, and FUNCTION may be any valid function.  If
+HOOK is void, it is first set to nil.  If HOOK's value is a single
+function, it is changed to a list of functions."
+  (or (boundp hook)
+      (set hook nil)
+      )
+  ;; If the hook value is a single function, turn it into a list.
+  (let ((old (symbol-value hook)))
+    (if (or (not (listp old))
+	    (eq (car old) 'lambda))
+	(set hook (list old))
+      ))
+  (or (if (consp function)
+	  ;; Clever way to tell whether a given lambda-expression
+	  ;; is equal to anything in the hook.
+	  (let ((tail (assoc (cdr function) (symbol-value hook))))
+	    (equal function tail)
+	    )
+	(memq function (symbol-value hook))
+	)
+      (set hook
+	   (if append
+	       (nconc (symbol-value hook) (list function))
+	     (cons function (symbol-value hook))
+	     ))
+      ))
