@@ -2534,13 +2534,9 @@ and show them as ascii pictures in an Emacs frame."
 
 ;;; Mew
 (eval-when-compile
-  (provide 'mew)
-  (condition-case nil
-      (require 'mew-cache)
-    (error nil))
-  (condition-case nil
-      (require 'mew-syntax)
-    (error nil))
+  (require 'mew)
+  (require 'mew-cache nil t)
+  (require 'mew-syntax nil t)
   ;; Avoid macro `mew-cache-hit' expand (Mew 1.94.2 or earlier).
   ;; Changed `mew-cache-hit' from macro to function at Mew 2.0.
   (if (not (fboundp 'mew-current-get-fld))
